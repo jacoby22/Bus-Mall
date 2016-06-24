@@ -33,6 +33,7 @@ var tracker = {
     return this.currentImage;
   },
   fillCurrentImages: function() {
+    this.getImage();
     var counter = 0;
     this.currentImages.push(this.currentImage);
     while (counter < 2) {
@@ -51,6 +52,18 @@ var tracker = {
   }
 };
 
-tracker.getImage();
 tracker.fillCurrentImages();
 tracker.displayCurrentImages();
+
+handleClick = function() {
+  tracker.totalClicks += 1;
+  console.log(tracker.totalClicks);
+};
+
+var button1 = tracker.img1;
+var button2 = tracker.img2;
+var button3 = tracker.img3;
+
+button1.addEventListener('click', handleClick);
+button2.addEventListener('click', handleClick);
+button3.addEventListener('click', handleClick);
