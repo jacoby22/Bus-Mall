@@ -24,7 +24,6 @@ var tracker = {
   img3: document.getElementById('image3'),
   getRandomNum: function() {
     randomValue = Math.floor(Math.random() * imageNames.length);
-    console.log(randomValue);
     return randomValue;
   },
   getImage: function() {
@@ -49,15 +48,23 @@ var tracker = {
     this.img1.src = this.currentImages[0].source;
     this.img2.src = this.currentImages[1].source;
     this.img3.src = this.currentImages[2].source;
+  },
+  clearCurrentImages: function() {
+    this.currentImages = [];
+  },
+  newSetOfImages: function() {
+    this.clearCurrentImages();
+    this.fillCurrentImages();
+    this.displayCurrentImages();
   }
 };
 
-tracker.fillCurrentImages();
-tracker.displayCurrentImages();
+tracker.newSetOfImages();
 
 handleClick = function() {
   tracker.totalClicks += 1;
   console.log(tracker.totalClicks);
+  tracker.newSetOfImages();
 };
 
 var button1 = tracker.img1;
