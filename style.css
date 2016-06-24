@@ -1,0 +1,18 @@
+body {
+  display: flex;
+  justify-content: center;
+}
+
+section {
+  margin: 0px;
+  display: flex;
+  width: 80%;
+  background-color: grey;
+  justify-content: space-between;
+}
+
+input {
+  border-color: 2px solid black;
+  margin: 20px;
+  box-shadow: 10px 10px 5px;
+}
