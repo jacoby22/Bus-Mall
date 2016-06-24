@@ -4,12 +4,13 @@ var imageNames = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum'
 function Img(name) {
   this.name = name;
   this.source = 'assets/' + name + '.jpg';
+  this.value = 0;
   imageObjects.push(this);
 }
 
 function instantiateImageObjects() {
   for(index in imageNames) {
-    imageNames[index] = new Img(imageNames[index]);
+    imageObjects[index] = new Img(imageNames[index]);
   }
 }
 
@@ -42,12 +43,14 @@ var tracker = {
         counter += 1;
       }
     }
-    console.log(this.currentImages);
   },
   displayCurrentImages: function() {
     this.img1.src = this.currentImages[0].source;
     this.img2.src = this.currentImages[1].source;
     this.img3.src = this.currentImages[2].source;
+    this.img1.name = this.currentImages[0].name;
+    this.img2.name = this.currentImages[1].name;
+    this.img3.name = this.currentImages[2].name;
   },
   clearCurrentImages: function() {
     this.currentImages = [];
@@ -64,7 +67,26 @@ tracker.newSetOfImages();
 handleClick = function() {
   tracker.totalClicks += 1;
   console.log(tracker.totalClicks);
+  checkUserClicks();
+  var imgName = this.name;
+  addToImgValue(imgName);
   tracker.newSetOfImages();
+};
+
+addToImgValue = function(imgName) {
+  console.log(imgName);
+  var indexValue = imageNames.indexOf(imgName);
+  console.log(indexValue);
+  var imgObject = imageObjects[indexValue];
+  imgObject.value += 1;
+};
+
+checkUserClicks = function() {
+  if (tracker.totalClicks > 15) {
+    button1.removeEventListener('click', handleClick);
+    button2.removeEventListener('click', handleClick);
+    button3.removeEventListener('click', handleClick);
+  }
 };
 
 var button1 = tracker.img1;
