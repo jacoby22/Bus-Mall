@@ -9,6 +9,11 @@ function Img(name) {
   imageObjects.push(this);
 }
 
+Img.prototype.clearValues = function () {
+  this.appearances = 0;
+  this.value = 0;
+};
+
 function instantiateImageObjects() {
   for(index in imageNames) {
     imageObjects[index] = new Img(imageNames[index]);
@@ -75,7 +80,14 @@ var tracker = {
     }
   },
   showList: function() {
-    document.getElementById('ul').style.display = 'block';
+    var display = document.getElementById('ul');
+    display.style.display = 'block';
+  },
+  clearAllData: function() {
+    for (var index in imageObjects) {
+      imageObjects[index].value = 0;
+      imageObjects[index].appearances = 0;
+    }
   }
 };
 
@@ -101,7 +113,6 @@ checkUserClicks = function() {
     button2.removeEventListener('click', handleClick);
     button3.removeEventListener('click', handleClick);
     fillListWithData();
-    tracker.showList();
   }
 };
 
@@ -112,10 +123,24 @@ fillListWithData = function() {
   }
 };
 
+showResults = function() {
+  tracker.showList();
+};
+
+resetImageTest = function() {
+  tracker.totalClicks = 0;
+  tracker.newSetOfImages();
+  tracker.clearAllData();
+};
+
 var button1 = tracker.img1;
 var button2 = tracker.img2;
 var button3 = tracker.img3;
+var button4 = document.getElementById('showResults');
+var button5 = document.getElementById('resetImageTest');
 
 button1.addEventListener('click', handleClick);
 button2.addEventListener('click', handleClick);
 button3.addEventListener('click', handleClick);
+button4.addEventListener('click', showResults);
+button5.addEventListener('click', resetImageTest);
