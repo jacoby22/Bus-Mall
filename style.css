@@ -2,11 +2,14 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background-color: rgba(145, 145, 145, 0.3);
+
 }
 
 h1 {
   display: flex;
   justify-content: center;
+  font-family: Arial;
 }
 
 div {
@@ -18,8 +21,8 @@ section {
   margin: 0px;
   display: flex;
   width: 1050px;
-  background-color: grey;
   justify-content: space-between;
+  /*border: 5px dashed black;*/
 }
 
 input {
@@ -40,6 +43,7 @@ ul {
 li {
   margin-left: 20px;
   margin-right: 20px;
+  font-family: Helvetica, sans-serif;
 }
 
 .displayEdits {
@@ -51,6 +55,24 @@ li {
   font-size: 20px;
   font-weight: bold;
   border-radius: 5px;
+}
+
+.border {
+  border: 5px dashed black;
+  border-left: none;
+  margin-left: 0px;
+}
+
+#b1 {
+  border-left: 5px dashed black;
+}
+
+#b2 {
+  border-right: none;
+}
+
+#b3 {
+  border-left: 5px dashed black;
 }
 
 #clickTotal {
