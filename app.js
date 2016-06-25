@@ -79,21 +79,13 @@ var tracker = {
       imageObjects[index].appearances = 0;
     }
   },
-  showList: function() {
-    var display = document.getElementById('ul');
+  show: function(id) {
+    var display = document.getElementById(id);
     display.style.display = 'block';
   },
-  hideList: function() {
-    var display = document.getElementById('ul');
+  hide: function(id) {
+    var display = document.getElementById(id);
     display.style.display = 'none';
-  },
-  showButton: function() {
-    var displayButton = document.getElementById('showResults');
-    displayButton.style.display = 'block';
-  },
-  hideButton: function() {
-    var displayButton = document.getElementById('showResults');
-    displayButton.style.display = 'none';
   },
   clearAllData: function() {
     for (var index in imageObjects) {
@@ -105,10 +97,6 @@ var tracker = {
     var clickTotal = document.getElementById('clickTotal');
     clickTotal.textContent = 'Total Clicks: ' + tracker.totalClicks;
     clickTotal.style.display = 'block';
-  },
-  hideClickTotal: function() {
-    var clickTotal = document.getElementById('clickTotal');
-    clickTotal.style.display = 'none';
   }
 };
 
@@ -129,7 +117,7 @@ addToImgValue = function(imgName) {
 };
 
 checkUserClicks = function() {
-  if (tracker.totalClicks > 2) {
+  if (tracker.totalClicks > 14) {
     button1.removeEventListener('click', handleClick);
     button2.removeEventListener('click', handleClick);
     button3.removeEventListener('click', handleClick);
@@ -146,12 +134,12 @@ fillListWithData = function() {
 };
 
 showResults = function() {
-  tracker.showList();
+  tracker.show('ul');
   tracker.showClickTotal();
 };
 
 showResultsButton = function() {
-  tracker.showButton();
+  tracker.show('showResults');
 };
 
 resetImageTest = function() {
@@ -161,9 +149,9 @@ resetImageTest = function() {
   button1.addEventListener('click', handleClick);
   button2.addEventListener('click', handleClick);
   button3.addEventListener('click', handleClick);
-  tracker.hideList();
-  tracker.hideButton();
-  tracker.hideClickTotal();
+  tracker.hide('ul');
+  tracker.hide('showResults');
+  tracker.hide('clickTotal');
 };
 
 var button1 = tracker.img1;
