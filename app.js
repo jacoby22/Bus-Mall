@@ -106,7 +106,7 @@ handleClick = function() {
   addToImgValue(imgName);
   tracker.totalClicks += 1;
   checkUserClicks();
-  newSetOfImages();
+  tracker.newSetOfImages();
 };
 
 addToImgValue = function(imgName) {
