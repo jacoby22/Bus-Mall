@@ -9,6 +9,11 @@ function Img(name) {
   imageObjects.push(this);
 }
 
+Img.prototype.clearValues = function () {
+  this.appearances = 0;
+  this.value = 0;
+};
+
 function instantiateImageObjects() {
   for(index in imageNames) {
     imageObjects[index] = new Img(imageNames[index]);
@@ -24,7 +29,6 @@ var tracker = {
   img1: document.getElementById('image1'),
   img2: document.getElementById('image2'),
   img3: document.getElementById('image3'),
-  ul: document.getElementById('ul'),
   getRandomNum: function() {
     randomValue = Math.floor(Math.random() * imageNames.length);
     return randomValue;
@@ -74,34 +78,53 @@ var tracker = {
       imageObjects[index].appearances = 0;
     }
   },
-  showList: function() {
-    document.getElementById('ul').style.display = 'block';
+  show: function(id) {
+    var display = document.getElementById(id);
+    display.style.display = 'block';
+  },
+  hide: function(id) {
+    var display = document.getElementById(id);
+    display.style.display = 'none';
+  },
+  clearAllData: function() {
+    for (var index in imageObjects) {
+      imageObjects[index].value = 0;
+      imageObjects[index].appearances = 0;
+    }
+  },
+  showClickTotal: function() {
+    var clickTotal = document.getElementById('clickTotal');
+    clickTotal.textContent = 'Total Clicks: ' + tracker.totalClicks;
+    clickTotal.style.display = 'block';
   }
 };
 
 tracker.newSetOfImages();
 
 handleClick = function() {
-  tracker.totalClicks += 1;
-  var imgName = this.name;
+  var imgName = event.target.name;
   addToImgValue(imgName);
+  tracker.totalClicks += 1;
   checkUserClicks();
-  tracker.newSetOfImages();
+  newSetOfImages();
 };
 
 addToImgValue = function(imgName) {
   var indexValue = imageNames.indexOf(imgName);
   var imgObject = imageObjects[indexValue];
-  imgObject.value += 1;
+  try {
+    imgObject.value += 1;
+  } catch(err) {
+    tracker.totalClicks -= 1;
+    alert('Please click on the image');
+  }
 };
 
 checkUserClicks = function() {
   if (tracker.totalClicks > 14) {
     button1.removeEventListener('click', handleClick);
-    button2.removeEventListener('click', handleClick);
-    button3.removeEventListener('click', handleClick);
     fillListWithData();
-    tracker.showList();
+    showResultsButton();
   }
 };
 
@@ -112,10 +135,29 @@ fillListWithData = function() {
   }
 };
 
-var button1 = tracker.img1;
-var button2 = tracker.img2;
-var button3 = tracker.img3;
+showResults = function() {
+  tracker.show('ul');
+  tracker.showClickTotal();
+};
+
+showResultsButton = function() {
+  tracker.show('showResults');
+};
+
+resetImageTest = function() {
+  tracker.totalClicks = 0;
+  tracker.newSetOfImages();
+  tracker.clearAllData();
+  button1.addEventListener('click', handleClick);
+  tracker.hide('ul');
+  tracker.hide('showResults');
+  tracker.hide('clickTotal');
+};
+
+var button1 = document.getElementById('section');
+var button4 = document.getElementById('showResults');
+var button5 = document.getElementById('resetImageTest');
 
 button1.addEventListener('click', handleClick);
-button2.addEventListener('click', handleClick);
-button3.addEventListener('click', handleClick);
+button4.addEventListener('click', showResults);
+button5.addEventListener('click', resetImageTest);
