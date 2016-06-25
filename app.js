@@ -29,7 +29,6 @@ var tracker = {
   img1: document.getElementById('image1'),
   img2: document.getElementById('image2'),
   img3: document.getElementById('image3'),
-  ul: document.getElementById('ul'),
   getRandomNum: function() {
     randomValue = Math.floor(Math.random() * imageNames.length);
     return randomValue;
@@ -103,24 +102,27 @@ var tracker = {
 tracker.newSetOfImages();
 
 handleClick = function() {
-  tracker.totalClicks += 1;
-  var imgName = this.name;
+  var imgName = event.target.name;
   addToImgValue(imgName);
+  tracker.totalClicks += 1;
   checkUserClicks();
-  tracker.newSetOfImages();
+  newSetOfImages();
 };
 
 addToImgValue = function(imgName) {
   var indexValue = imageNames.indexOf(imgName);
   var imgObject = imageObjects[indexValue];
-  imgObject.value += 1;
+  try {
+    imgObject.value += 1;
+  } catch(err) {
+    tracker.totalClicks -= 1;
+    alert('Please click on the image');
+  }
 };
 
 checkUserClicks = function() {
   if (tracker.totalClicks > 14) {
     button1.removeEventListener('click', handleClick);
-    button2.removeEventListener('click', handleClick);
-    button3.removeEventListener('click', handleClick);
     fillListWithData();
     showResultsButton();
   }
@@ -147,21 +149,15 @@ resetImageTest = function() {
   tracker.newSetOfImages();
   tracker.clearAllData();
   button1.addEventListener('click', handleClick);
-  button2.addEventListener('click', handleClick);
-  button3.addEventListener('click', handleClick);
   tracker.hide('ul');
   tracker.hide('showResults');
   tracker.hide('clickTotal');
 };
 
-var button1 = tracker.img1;
-var button2 = tracker.img2;
-var button3 = tracker.img3;
+var button1 = document.getElementById('section');
 var button4 = document.getElementById('showResults');
 var button5 = document.getElementById('resetImageTest');
 
 button1.addEventListener('click', handleClick);
-button2.addEventListener('click', handleClick);
-button3.addEventListener('click', handleClick);
 button4.addEventListener('click', showResults);
 button5.addEventListener('click', resetImageTest);
