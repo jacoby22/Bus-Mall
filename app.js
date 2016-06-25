@@ -5,6 +5,7 @@ function Img(name) {
   this.name = name;
   this.source = 'assets/' + name + '.jpg';
   this.value = 0;
+  this.appearances = 0;
   imageObjects.push(this);
 }
 
@@ -23,6 +24,7 @@ var tracker = {
   img1: document.getElementById('image1'),
   img2: document.getElementById('image2'),
   img3: document.getElementById('image3'),
+  ul: document.getElementById('ul'),
   getRandomNum: function() {
     randomValue = Math.floor(Math.random() * imageNames.length);
     return randomValue;
@@ -52,6 +54,11 @@ var tracker = {
     this.img2.name = this.currentImages[1].name;
     this.img3.name = this.currentImages[2].name;
   },
+  countImageAppearance: function() {
+    this.currentImages[0].appearances += 1;
+    this.currentImages[1].appearances += 1;
+    this.currentImages[2].appearances += 1;
+  },
   clearCurrentImages: function() {
     this.currentImages = [];
   },
@@ -59,6 +66,16 @@ var tracker = {
     this.clearCurrentImages();
     this.fillCurrentImages();
     this.displayCurrentImages();
+    this.countImageAppearance();
+  },
+  zeroOutImageObjects: function() {
+    for (var index in imageObjects) {
+      imageObjects[index].value = 0;
+      imageObjects[index].appearances = 0;
+    }
+  },
+  showList: function() {
+    document.getElementById('ul').style.display = 'block';
   }
 };
 
@@ -66,26 +83,32 @@ tracker.newSetOfImages();
 
 handleClick = function() {
   tracker.totalClicks += 1;
-  console.log(tracker.totalClicks);
-  checkUserClicks();
   var imgName = this.name;
   addToImgValue(imgName);
+  checkUserClicks();
   tracker.newSetOfImages();
 };
 
 addToImgValue = function(imgName) {
-  console.log(imgName);
   var indexValue = imageNames.indexOf(imgName);
-  console.log(indexValue);
   var imgObject = imageObjects[indexValue];
   imgObject.value += 1;
 };
 
 checkUserClicks = function() {
-  if (tracker.totalClicks > 15) {
+  if (tracker.totalClicks > 14) {
     button1.removeEventListener('click', handleClick);
     button2.removeEventListener('click', handleClick);
     button3.removeEventListener('click', handleClick);
+    fillListWithData();
+    tracker.showList();
+  }
+};
+
+fillListWithData = function() {
+  for (var j = 1; j < imageObjects.length + 1; j++) {
+    var listEl = document.getElementById('' + j);
+    listEl.textContent = imageObjects[j - 1].name + ': ' + imageObjects[j - 1].value;
   }
 };
 
