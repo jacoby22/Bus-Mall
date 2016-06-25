@@ -24,6 +24,7 @@ var tracker = {
   img1: document.getElementById('image1'),
   img2: document.getElementById('image2'),
   img3: document.getElementById('image3'),
+  ul: document.getElementById('ul'),
   getRandomNum: function() {
     randomValue = Math.floor(Math.random() * imageNames.length);
     return randomValue;
@@ -72,6 +73,9 @@ var tracker = {
       imageObjects[index].value = 0;
       imageObjects[index].appearances = 0;
     }
+  },
+  showList: function() {
+    document.getElementById('ul').style.display = 'block';
   }
 };
 
@@ -79,9 +83,9 @@ tracker.newSetOfImages();
 
 handleClick = function() {
   tracker.totalClicks += 1;
-  checkUserClicks();
   var imgName = this.name;
   addToImgValue(imgName);
+  checkUserClicks();
   tracker.newSetOfImages();
 };
 
@@ -92,11 +96,12 @@ addToImgValue = function(imgName) {
 };
 
 checkUserClicks = function() {
-  if (tracker.totalClicks > 15) {
+  if (tracker.totalClicks > 14) {
     button1.removeEventListener('click', handleClick);
     button2.removeEventListener('click', handleClick);
     button3.removeEventListener('click', handleClick);
     fillListWithData();
+    tracker.showList();
   }
 };
 
