@@ -39,7 +39,17 @@ li {
   margin-right: 20px;
 }
 
-/*#group1 {
+.displayEdits {
+  border-color: 2px solid black;
+  margin: 20px;
+  box-shadow: 5px 5px 3px;
+  height: 40px;
+  width: 150px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#group1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -64,4 +74,4 @@ li {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}*/
+}

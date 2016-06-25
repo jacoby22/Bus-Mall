@@ -83,11 +83,32 @@ var tracker = {
     var display = document.getElementById('ul');
     display.style.display = 'block';
   },
+  hideList: function() {
+    var display = document.getElementById('ul');
+    display.style.display = 'none';
+  },
+  showButton: function() {
+    var displayButton = document.getElementById('showResults');
+    displayButton.style.display = 'block';
+  },
+  hideButton: function() {
+    var displayButton = document.getElementById('showResults');
+    displayButton.style.display = 'none';
+  },
   clearAllData: function() {
     for (var index in imageObjects) {
       imageObjects[index].value = 0;
       imageObjects[index].appearances = 0;
     }
+  },
+  showClickTotal: function() {
+    var clickTotal = document.getElementById('clickTotal');
+    clickTotal.textContent = 'Total Clicks: ' + tracker.totalClicks;
+    clickTotal.style.display = 'block';
+  },
+  hideClickTotal: function() {
+    var clickTotal = document.getElementById('clickTotal');
+    clickTotal.style.display = 'none';
   }
 };
 
@@ -108,11 +129,12 @@ addToImgValue = function(imgName) {
 };
 
 checkUserClicks = function() {
-  if (tracker.totalClicks > 14) {
+  if (tracker.totalClicks > 2) {
     button1.removeEventListener('click', handleClick);
     button2.removeEventListener('click', handleClick);
     button3.removeEventListener('click', handleClick);
     fillListWithData();
+    showResultsButton();
   }
 };
 
@@ -125,12 +147,23 @@ fillListWithData = function() {
 
 showResults = function() {
   tracker.showList();
+  tracker.showClickTotal();
+};
+
+showResultsButton = function() {
+  tracker.showButton();
 };
 
 resetImageTest = function() {
   tracker.totalClicks = 0;
   tracker.newSetOfImages();
   tracker.clearAllData();
+  button1.addEventListener('click', handleClick);
+  button2.addEventListener('click', handleClick);
+  button3.addEventListener('click', handleClick);
+  tracker.hideList();
+  tracker.hideButton();
+  tracker.hideClickTotal();
 };
 
 var button1 = tracker.img1;
