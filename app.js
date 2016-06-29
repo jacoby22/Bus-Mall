@@ -25,6 +25,7 @@ instantiateImageObjects();
 var tracker = {
   totalClicks: 0,
   currentImages: [],
+  allTotalValues: [],
   currentImage: null,
   img1: document.getElementById('image1'),
   img2: document.getElementById('image2'),
@@ -96,55 +97,55 @@ var tracker = {
     var clickTotal = document.getElementById('clickTotal');
     clickTotal.textContent = 'Total Clicks: ' + tracker.totalClicks;
     clickTotal.style.display = 'block';
+  },
+  fillTotalValues: function() {
+    for (var index in imageObjects) {
+      this.allTotalValues[index] = imageObjects[index].value;
+    }
   }
 };
 
-tracker.newSetOfImages();
-
-handleClick = function() {
+var handleClick = function() {
   var imgName = event.target.name;
   addToImgValue(imgName);
   tracker.totalClicks += 1;
   checkUserClicks();
-  tracker.newSetOfImages();
-};
-
-addToImgValue = function(imgName) {
-  var indexValue = imageNames.indexOf(imgName);
-  var imgObject = imageObjects[indexValue];
-  try {
-    imgObject.value += 1;
-  } catch(err) {
-    tracker.totalClicks -= 1;
-    alert('Please click on the image');
+  if (imgName) {
+    tracker.newSetOfImages();
   }
 };
 
-checkUserClicks = function() {
-  if (tracker.totalClicks > 14) {
+var addToImgValue = function(imgName) {
+  var indexValue = imageNames.indexOf(imgName);
+  var imgObject = imageObjects[indexValue];
+  imgObject.value += 1;
+};
+
+var checkUserClicks = function() {
+  if (tracker.totalClicks > 2) {
     button1.removeEventListener('click', handleClick);
     fillListWithData();
+    tracker.fillTotalValues();
     showResultsButton();
   }
 };
 
-fillListWithData = function() {
+var fillListWithData = function() {
   for (var j = 1; j < imageObjects.length + 1; j++) {
     var listEl = document.getElementById('' + j);
     listEl.textContent = imageObjects[j - 1].name + ': ' + imageObjects[j - 1].value;
   }
 };
 
-showResults = function() {
-  tracker.show('ul');
-  tracker.showClickTotal();
+var showResults = function() {
+  makeChart();
 };
 
-showResultsButton = function() {
+var showResultsButton = function() {
   tracker.show('showResults');
 };
 
-resetImageTest = function() {
+var resetImageTest = function() {
   tracker.totalClicks = 0;
   tracker.newSetOfImages();
   tracker.clearAllData();
@@ -161,3 +162,81 @@ var button5 = document.getElementById('resetImageTest');
 button1.addEventListener('click', handleClick);
 button4.addEventListener('click', showResults);
 button5.addEventListener('click', resetImageTest);
+
+var makeChart = function() {
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: imageNames,
+      datasets: [{
+        label: '# of Votes',
+        axisX: {
+          fontSize: 20
+        },
+        data: tracker.allTotalValues,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Number of Votes for Each Image',
+        fontSize: 20
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true
+          }
+        }]
+      }
+    }
+  });
+};
+
+tracker.newSetOfImages();
