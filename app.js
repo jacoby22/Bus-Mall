@@ -1,28 +1,26 @@
 var imageObjects = [];
 var imageNames = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'];
 
-function Img(name) {
+function Img(name, value, appearances) {
   this.name = name;
   this.source = 'assets/' + name + '.jpg';
-  this.value = 0;
-  this.appearances = 0;
+  this.value = value;
+  this.appearances = appearances;
   imageObjects.push(this);
 }
 
-function instantiateImageObjects() {
+var instantiateImageObjects = function() {
   for(index in imageNames) {
-    imageObjects[index] = new Img(imageNames[index]);
+    imageObjects[index] = new Img(imageNames[index], 0, 0);
   }
-}
-
-instantiateImageObjects();
+};
 
 var tracker = {
   totalClicks: 0,
   currentImages: [],
   allTotalValues: [],
   currentImage: null,
-  sampleSize: 15,
+  sampleSize: 5,
   img1: document.getElementById('image1'),
   img2: document.getElementById('image2'),
   img3: document.getElementById('image3'),
@@ -73,12 +71,12 @@ var tracker = {
     var display = document.getElementById(id);
     display.style.display = 'block';
   },
-  clearAllData: function() {
-    for (var index in imageObjects) {
-      imageObjects[index].value = 0;
-      imageObjects[index].appearances = 0;
-    }
-  },
+  // clearAllData: function() {
+  //   for (var index in imageObjects) {
+  //     imageObjects[index].value = 0;
+  //     imageObjects[index].appearances = 0;
+  //   }
+  // },
   fillTotalValues: function() {
     for (var index in imageObjects) {
       tracker.allTotalValues[index] = imageObjects[index].value;
@@ -86,6 +84,8 @@ var tracker = {
   },
   showResults: function() {
     tracker.makeChart();
+    tracker.stringifyForLocalStorage();
+    tracker.parseFromLocalStorage();
   },
   addToImgValue: function(imgName) {
     var indexValue = imageNames.indexOf(imgName);
@@ -94,7 +94,7 @@ var tracker = {
   },
   resetImageTest: function() {
     tracker.totalClicks = 0;
-    tracker.clearAllData();
+   //  tracker.clearAllData();
     location.reload();
   },
   checkUserClicks: function() {
@@ -102,6 +102,19 @@ var tracker = {
       tracker.button1.removeEventListener('click', tracker.handleClick);
       tracker.fillTotalValues();
       tracker.showResultsButton();
+    }
+  },
+  stringifyForLocalStorage: function() {
+    var stringify = JSON.stringify(imageObjects);
+    localStorage.setItem('images', stringify);
+  },
+  parseFromLocalStorage: function() {
+    var parse = JSON.parse(localStorage.getItem('images'));
+    return parse;
+  },
+  associateWithTracker: function(parse) {
+    for (var object in parse) {
+      imageObjects[object] = new Img(parse[object].name, parse[object].value, parse[object].appearances);
     }
   },
   handleClick: function() {
@@ -196,4 +209,14 @@ tracker.button1.addEventListener('click', tracker.handleClick);
 tracker.button4.addEventListener('click', tracker.showResults);
 tracker.button5.addEventListener('click', tracker.resetImageTest);
 
-tracker.newSetOfImages();
+(function() {
+  if (localStorage.images) {
+    var parse = tracker.parseFromLocalStorage();
+    console.log('parsed');
+    tracker.associateWithTracker(parse);
+    tracker.newSetOfImages();
+  } else {
+    instantiateImageObjects();
+    tracker.newSetOfImages();
+  }
+})();
