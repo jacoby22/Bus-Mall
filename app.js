@@ -73,10 +73,6 @@ var tracker = {
     var display = document.getElementById(id);
     display.style.display = 'block';
   },
-  hide: function(id) {
-    var display = document.getElementById(id);
-    display.style.display = 'none';
-  },
   clearAllData: function() {
     for (var index in imageObjects) {
       imageObjects[index].value = 0;
@@ -98,10 +94,8 @@ var tracker = {
   },
   resetImageTest: function() {
     tracker.totalClicks = 0;
-    tracker.newSetOfImages();
     tracker.clearAllData();
-    tracker.button1.addEventListener('click', tracker.handleClick);
-    tracker.hide('showResults');
+    location.reload();
   },
   checkUserClicks: function() {
     if (tracker.totalClicks > tracker.sampleSize - 1) {
