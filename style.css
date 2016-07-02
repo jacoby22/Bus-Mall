@@ -91,7 +91,19 @@ canvas {
   justify-content: center;
 }
 
+#centerChart2 {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+
 #chart {
+  width: 1000px;
+  height: 600px;
+}
+
+#chart2 {
+  display: block;
   width: 1000px;
   height: 600px;
 }
