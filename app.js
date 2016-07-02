@@ -1,3 +1,4 @@
+var percentages = [];
 var imageObjects = [];
 var imageNames = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'];
 
@@ -28,6 +29,7 @@ var tracker = {
   button4: document.getElementById('showResults'),
   button5: document.getElementById('resetImageTest'),
   ctx: document.getElementById('myChart').getContext('2d'),
+  ctx2: document.getElementById('myChart2').getContext('2d'),
   getRandomNum: function() {
     randomValue = Math.floor(Math.random() * imageNames.length);
     return randomValue;
@@ -71,19 +73,15 @@ var tracker = {
     var display = document.getElementById(id);
     display.style.display = 'block';
   },
-  // clearAllData: function() {
-  //   for (var index in imageObjects) {
-  //     imageObjects[index].value = 0;
-  //     imageObjects[index].appearances = 0;
-  //   }
-  // },
   fillTotalValues: function() {
     for (var index in imageObjects) {
       tracker.allTotalValues[index] = imageObjects[index].value;
+      percentages[index] = parseFloat(((imageObjects[index].value / imageObjects[index].appearances) * 100).toFixed(2));
     }
   },
   showResults: function() {
-    tracker.makeChart();
+    tracker.makeChart(imageNames, tracker.allTotalValues, tracker.ctx, 'Number of Votes for Each Image', '# of Votes');
+    tracker.makeChart(imageNames, percentages, tracker.ctx2, 'Percentage Picked When Image Displayed', 'Percentage');
     tracker.stringifyForLocalStorage();
     tracker.parseFromLocalStorage();
   },
@@ -94,7 +92,6 @@ var tracker = {
   },
   resetImageTest: function() {
     tracker.totalClicks = 0;
-   //  tracker.clearAllData();
     location.reload();
   },
   checkUserClicks: function() {
@@ -129,17 +126,17 @@ var tracker = {
   showResultsButton: function() {
     tracker.show('showResults');
   },
-  makeChart: function() {
-    var myChart = new Chart(tracker.ctx, {
+  makeChart: function(labels, data, elem, title, key) {
+    var myChart = new Chart(elem, {
       type: 'bar',
       data: {
-        labels: imageNames,
+        labels: labels,
         datasets: [{
-          label: '# of Votes',
+          label: key,
           axisX: {
             fontSize: 20
           },
-          data: tracker.allTotalValues,
+          data: data,
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',
@@ -190,7 +187,7 @@ var tracker = {
       options: {
         title: {
           display: true,
-          text: 'Number of Votes for Each Image',
+          text: title,
           fontSize: 20
         },
         scales: {
